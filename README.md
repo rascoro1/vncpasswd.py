@@ -15,6 +15,7 @@ List of Extra Features:
  - Supports RealVNC long passwords!
  - Hex input and output
  - Read/Write to windows RealVNC registry key
+ - (rascoro) d3des.py can create ~/.vnc/passwd file
 
 Long password decryption tested against RealVNC Enterprise Edition, 
 version: _E4.5.3 (r39012)_ 64-bit (x64) unicode
