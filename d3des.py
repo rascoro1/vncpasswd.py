@@ -368,15 +368,22 @@ def desfunc(block, keys):
   right &= 0xffffffffL
   return pack('>II', right, leftt)
 
+def get_vnc_enc(password):
+    passpadd = (password + '\x00'*8)[:8]
+    strkey = ''.join([ chr(x) for x in vnckey ])
+    ekey = deskey(strkey, False)
+    ctext = desfunc(passpadd, ekey)
+    return ctext
 
-# test
 if __name__ == '__main__':
-  key = '0123456789abcdef'.decode('hex')
-  plain = '0123456789abcdef'.decode('hex')
-  cipher = '6e09a37726dd560c'.decode('hex')
-  ek = deskey(key, False)
-  dk = deskey(key, True)
-  assert desfunc(plain, ek) == cipher
-  assert desfunc(desfunc(plain, ek), dk) == plain
-  assert desfunc(desfunc(plain, dk), ek) == plain
-  print 'test succeeded.'
+    if len(sys.argv) > 1:
+        username = sys.argv[1]
+        password = getpass("{} Password:".format(username))
+        res = get_vnc_enc(password)
+        temp_fname = "temp-passwd-{}".format(username)
+        f = open(temp_fname, 'w')
+        f.write(res)
+        f.close()
+    else:
+        print 'usage: {} <username>'.format(sys.argv[0])
+
